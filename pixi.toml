@@ -12,6 +12,8 @@ jlpm = { cmd = ["jlpm", "run"] }
 jlpm_add = { cmd = ["jlpm", "add"] }
 jlpm_init = { cmd = ["jlpm", "install", "&&", "jlpm", "build"] }
 launch_jl = { cmd = ["jupyter", "lab"] }
+build = { cmd = ["python", "-m", "build"] }
+publish = { cmd = ["python", "-m", "twine", "upload", "dist/*"] }
 
 [dependencies]
 python = "3.10.*"
