@@ -2,7 +2,21 @@
 
 [![Github Actions Status](https://github.com/gnodar01/nbdotrun/workflows/Build/badge.svg)](https://github.com/gnodar01/nbdotrun/actions/workflows/build.yml)
 
-A JupyterLab extension that will listen for code cell changes and run if ending in dot (`.`).
+A JupyterLab extension that will listen for code cell changes and run if ending in dot (`.`) by default, or any other configured trigger symbol.
+
+`shift-enter` to run a code cell just as fast as `enter .`, so why use this?
+
+It's mostly to support my own workflow.
+I use [Jupytext](https://jupytext.readthedocs.io/en/latest/) with its [paired notebooks](https://jupytext.readthedocs.io/en/latest/paired-notebooks.html) feature enabled.
+Jupytext allows you to edit your text-only files (e.g. `.py` or `.md`) as though they were notebook files (`json` structured in the `.ipynb` format).
+It lets you do this in JupyterLab itself, giving you a standard notebook interface even though underneath there is a simple text file.
+However I don't like editing in JupyterLab.
+I like to have the JupyterLab interface open to view rich outputs like images and interactive plots, and to tinker with widgets.
+The actual writing of cells however, I prefer to do in a text editor.
+Jupytext syncs changes I make in the text editor to the notebook (without needing to reload due to the wonderful [jupyter-collaboration](https://github.com/jupyterlab/jupyter-collaboration) extension).
+Sometimes I want the cell I edited in the text editor to also run in JupyterLab so that I can see the output.
+I want to do this without having to switch over from the text editor to JupyterLab, going to the edited cell, and running it manually.
+So instead I just put `.` at the last line of the edited cell in the text editor, and have it run automatically.
 
 ## Requirements
 
