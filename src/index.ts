@@ -5,14 +5,9 @@ import {
 
 import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
-import {
-  INotebookTracker,
-  NotebookPanel,
-  NotebookActions
-} from '@jupyterlab/notebook';
+import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 
-import { CodeCellModel } from '@jupyterlab/cells';
-//import { CodeCell } from '@jupyterlab/cells';
+import { CodeCellModel, CodeCell } from '@jupyterlab/cells';
 
 const PLUGIN_NAME = 'nbdotrun';
 const PLUGIN_ID = `${PLUGIN_NAME}:plugin`;
@@ -53,27 +48,28 @@ function attachNotebookListener(panel: NotebookPanel, triggerSymbol: string) {
 
     const throttledScan = throttle(() => {
       for (let i = 0; i < model.cells.length; i++) {
-        //const cellWidget = notebook.widgets[i];
-        //if (cellWidget instanceof CodeCell) {
-        //  void CodeCell.execute(cellWidget, panel.sessionContext);
-        //}
+        const cellWidget = notebook.widgets[i];
         const cellModel = model.cells.get(i);
-        if (cellModel.type === 'code') {
+
+        if (cellModel?.type === 'code' && cellWidget instanceof CodeCell) {
           const codeModel = cellModel as CodeCellModel;
           const source = codeModel.sharedModel.getSource();
+
           if (shouldAutoExecute(source, triggerSymbol)) {
             console.log(
               `${PLUGIN_NAME} Executing cell ${i} due to terminal symbol match: "${triggerSymbol}"`
             );
 
-            const lines = source.split('\n');
-            const newSource = lines.slice(0, -1).join('\n');
+            // remove the trigger line
+            const newSource = source
+              .trimEnd()
+              .split('\n')
+              .slice(0, -1)
+              .join('\n');
+
             codeModel.sharedModel.setSource(newSource);
 
-            const prevActiveCellIndex = notebook.activeCellIndex;
-            notebook.activeCellIndex = i;
-            NotebookActions.run(notebook, panel.sessionContext);
-            notebook.activeCellIndex = prevActiveCellIndex;
+            void CodeCell.execute(cellWidget, panel.sessionContext);
           }
         }
       }
