@@ -123,3 +123,5 @@ dmypy.json
 # pixi environments
 .pixi
 *.egg-info
+
+*.ipynb
