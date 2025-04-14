@@ -7,7 +7,7 @@ import { ISettingRegistry } from '@jupyterlab/settingregistry';
 
 import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 
-import { CodeCellModel, CodeCell } from '@jupyterlab/cells';
+import { CodeCellModel, CodeCell, ICellModel } from '@jupyterlab/cells';
 
 const PLUGIN_NAME = 'nbdotrun';
 const PLUGIN_ID = `${PLUGIN_NAME}:plugin`;
@@ -37,6 +37,9 @@ function shouldAutoExecute(text: string, triggerSymbol: string) {
 }
 
 function attachNotebookListener(panel: NotebookPanel, triggerSymbol: string) {
+  // track which cells have been connected
+  const connectedCells = new WeakSet<ICellModel>();
+
   panel.context.ready.then(() => {
     const notebook = panel.content;
     const model = notebook.model;
@@ -75,14 +78,29 @@ function attachNotebookListener(panel: NotebookPanel, triggerSymbol: string) {
       }
     }, 300); // debounce time in ms
 
-    model.cells.changed.connect(throttledScan);
+    // Initial hookup for existing cells
     for (let i = 0; i < model.cells.length; i++) {
       const cellModel = model.cells.get(i);
-      if (cellModel.type === 'code') {
+      if (!connectedCells.has(cellModel) && cellModel.type === 'code') {
         const codeModel = cellModel as CodeCellModel;
         codeModel.contentChanged.connect(throttledScan);
+        connectedCells.add(codeModel);
       }
     }
+
+    model.cells.changed.connect((_, changes) => {
+      throttledScan();
+
+      if (changes.type === 'add') {
+        changes.newValues.forEach(cell => {
+          if (!connectedCells.has(cell) && cell.type === 'code') {
+            const codeModel = cell as CodeCellModel;
+            codeModel.contentChanged.connect(throttledScan);
+            connectedCells.add(codeModel);
+          }
+        });
+      }
+    });
   });
 }
 
