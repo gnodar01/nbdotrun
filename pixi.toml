@@ -22,3 +22,4 @@ nodejs = "18.*"
 nbdotrun = { path = ".", editable = true }
 jldracula = ">=0.2.0, <0.3"
 build = ">=1.2.2.post1, <2"
+twine = ">=6.1.0, <7"
