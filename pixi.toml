@@ -17,9 +17,8 @@ launch_jl = { cmd = ["jupyter", "lab"] }
 python = "3.10.*"
 jupyterlab = "4.*"
 nodejs = "18.*"
-copier = "7.*"
-jinja2-time = ">=0.2.0,<0.3"
 
 [pypi-dependencies]
 nbdotrun = { path = ".", editable = true }
 jldracula = ">=0.2.0, <0.3"
+build = ">=1.2.2.post1, <2"
