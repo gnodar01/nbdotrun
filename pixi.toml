@@ -37,6 +37,7 @@ python = "3.10.*"
 jupyterlab = "4.*"
 nodejs = "18.*"
 grayskull = ">=2.9.1,<3"
+conda-build = ">=25.4.2,<26"
 
 [pypi-dependencies]
 nbdotrun = { path = ".", editable = true }
