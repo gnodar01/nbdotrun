@@ -1,9 +1,22 @@
-[project]
-authors = ["Nodar Gogoberidze <gnodar01@gmail.com>"]
+[workspace]
+preview = ["pixi-build"]
 channels = ["conda-forge", "nodefaults"]
-name = "nbdotrun"
 platforms = ["osx-64"]
+
+[package]
+authors = ["Nodar Gogoberidze <gnodar01@gmail.com>"]
+name = "nbdotrun"
 version = "0.1.0"
+
+[package.build]
+backend = { name = "pixi-build-python", version = "0.1.*" }
+channels = [
+  "https://prefix.dev/pixi-build-backends",
+  "https://prefix.dev/conda-forge",
+]
+
+[package.host-dependencies]
+hatchling = "*"
 
 [tasks]
 list_exts = { cmd = ["eza", "--long", "--all", "--git", "--header", "--icons=auto", "--classify=auto", "$CONDA_PREFIX/share/jupyter/labextensions", "&&", "jupyter", "labextension", "list"] }
