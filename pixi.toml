@@ -17,6 +17,9 @@ channels = [
 
 [package.host-dependencies]
 hatchling = "*"
+nodejs = ">=22.13.0,<22.14"
+hatch-nodejs-version = ">=0.3.2,<0.4"
+hatch-jupyter-builder = ">=0.9.1,<0.10"
 
 [tasks]
 list_exts = { cmd = ["eza", "--long", "--all", "--git", "--header", "--icons=auto", "--classify=auto", "$CONDA_PREFIX/share/jupyter/labextensions", "&&", "jupyter", "labextension", "list"] }
