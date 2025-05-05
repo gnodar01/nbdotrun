@@ -1,6 +1,6 @@
 {
     "name": "nbdotrun",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "A JupyterLab extension that will listen for code cell changes and run if ending in dot (`.`).",
     "keywords": [
         "jupyter",
